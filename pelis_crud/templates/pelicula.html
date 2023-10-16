@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Película</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #fff;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            text-align: left;
+            background-color: #444;
+            border: 1px solid #555;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        strong {
+            color: #7a58cc;
+        }
+        
+        a {
+            color: #7a58cc;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        form {
+            background-color: #444;
+            border: 1px solid #555;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        textarea {
+            width: 92%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 3px;
+            background-color: #666;
+            color: #fff;
+        }
+        
+        button {
+            background-color: #7a58cc;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #fff;
+        }
+        
+        h2 {
+            color: #fff;
+        }
+        
+        h3 {
+            color: #fff;
+        }
+        
+        p {
+            color: #fff;
+        }
+        
+        .editar-comentario {
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+        }
+        
+        .editar-comentario:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Película</h1>
+    <ul>
+        <li>
+            <strong>Título:</strong> {{ pelicula.titulo }}<br>
+            <strong>Director:</strong> {{ pelicula.director }}<br>
+        </li>
+    </ul>
+
+    <br><br>
+
+    <a href="{% url 'home' %}">Volver al inicio</a>
+
+    <form method="post" action="{% url 'comentar' pelicula.id %}">
+        {% csrf_token %}
+        <textarea name="comentario" cols="30" rows="5" placeholder="Deja un comentario"></textarea>
+        <button type="submit">Comentar</button>
+    </form>
+
+    <h2>Comentarios</h2>
+
+    <ul>
+        {% for comentario in comentarios %}
+        <li>
+            {{ comentario.usuario }}:<br> {{ comentario.texto }}<br> {{ comentario.fecha }}<br> {% if comentario.usuario == request.user.usuario %}
+            <form method="post" action="{% url 'eliminar_comentario' comentario.id %}">
+                {% csrf_token %}
+                <button type="submit">Eliminar</button>
+            </form>
+
+            <br>
+
+            <form method="post" action="{% url 'editar_comentario' comentario.id %}">
+                {% csrf_token %}
+                <button class="editar-comentario" type="submit">Editar</button>
+            </form>
+            {% endif %}
+        </li>
+        {% empty %}
+        <p>Aún no hay comentarios para esta película.</p>
+        {% endfor %} {% if comentario_editar %}
+        <h3>Editar Comentario</h3>
+        {% include 'editar_comentario.html' %} {% endif %}
+        <!-- eliminar pelicula -->
+        {% if pelicula.usuario == request.user.usuario %}
+        <form method="post" action="{% url 'eliminar_pelicula' pelicula.id %}">
+            {% csrf_token %}
+            <button type="submit">Eliminar película</button>
+        </form>
+        {% endif %}
+    </ul>
+</body>
+
+</html>

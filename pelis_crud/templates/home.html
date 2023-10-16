@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            color: #fff;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            background-color: #444;
+            border: 1px solid #555;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        strong {
+            color: #ffffff;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 5px 20px;
+            /* Ajusta el relleno según tus preferencias */
+            background-color: #7a58cc;
+            color: #fff;
+            /* Color de texto en el botón */
+            text-decoration: none;
+            border: 2px solid #7a58cc;
+            /* Grosor y color del borde */
+            border-radius: 5px;
+            /* Bordes redondeados */
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        a:hover {
+            background-color: #6249aa;
+            /* Color de fondo al pasar el cursor */
+            border-color: #6249aa;
+            /* Color del borde al pasar el cursor */
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        #logout {
+            background-color: #7a58cc;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #logout:hover {
+            background-color: #ff0000;
+        }
+        
+        form {
+            margin: 20px 0;
+        }
+        
+        input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #555;
+            border-radius: 3px;
+            background-color: #666;
+            color: #fff;
+        }
+        
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Películas</h1>
+    <!-- logout -->
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button id="logout" type="submit">Cerrar sesión</button>
+    </form>
+    <ul>
+        {% for pelicula in peliculas %}
+        <li>
+            <strong>Título:</strong> {{ pelicula.titulo }}<br>
+            <strong>Director:</strong> {{ pelicula.director }}<br>
+            <a href="{% url 'pelicula' pelicula.id %}">Ver detalles de la película</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <br><br>
+
+
+    <!-- search -->
+    <form method="get" action="{% url 'buscar' %}">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar películas por título o director">
+        <button type="submit">Buscar</button>
+    </form>
+
+
+
+    <!-- add movie -->
+    <a href="{% url 'agregar_pelicula' %}">Agregar película</a>
+
+    <!-- profile -->
+    <a href="{% url 'ver_perfil' %}">Ver perfil</a>
+</body>
+
+</html>

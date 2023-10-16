@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de la Búsqueda</title>
+    <style>/* Estilo general */
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1, h2 {
+            color: #fff;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            background-color: #444;
+            border: 1px solid #555;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        strong {
+            color: #007BFF;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #7a58cc; /* Color morado para los botones */
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        a:hover {
+            background-color: #6249aa; /* Color morado más oscuro al pasar el cursor */
+        }
+        
+        /* Botones en el formulario */
+        button {
+            background-color: #7a58cc; /* Color morado para los botones en los formularios */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #6249aa; /* Color morado más oscuro al pasar el cursor */
+        }
+        </style>
+</head>
+<body>
+    <h1>Resultados de la Búsqueda de Películas</h1>
+    
+    <form method="get" action="{% url 'buscar' %}">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar películas por título o director">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <ul>
+        {% for pelicula in peliculas %}
+            <li>
+                <strong>Título:</strong> {{ pelicula.titulo }}<br>
+                <strong>Director:</strong> {{ pelicula.director }}<br>
+                <a href="{% url 'pelicula' pelicula.id %}">Ver detalles de la película</a>
+            </li>
+        {% empty %}
+            <p>No se encontraron películas que coincidan con la búsqueda.</p>
+        {% endfor %}
+    </ul>
+
+    
+    <!-- logout -->
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Cerrar sesión</button>
+    </form>
+
+    <!-- home -->
+    <a href="{% url 'home' %}">Volver al inicio</a>
+    
+</body>
+</html>

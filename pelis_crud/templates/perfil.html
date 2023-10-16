@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <style>
+        /* Estilo general */
+body {
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    color: #fff;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+strong {
+    color: #007BFF;
+}
+
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #7a58cc; /* Color morado para los botones */
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+a:hover {
+    background-color: #6249aa; /* Color morado más oscuro al pasar el cursor */
+}
+
+/* Botones en el formulario */
+button {
+    background-color: #7a58cc; /* Color morado para los botones en los formularios */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #6249aa; /* Color morado más oscuro al pasar el cursor */
+}
+
+    </style>
+    
+</head>
+<body>
+    <!-- See comments and movies by user -->
+    <h1>Perfil</h1>
+
+    <h2>Películas</h2>
+
+    <ul>
+
+        {% for pelicula in peliculas %}
+
+            <li>
+
+                <strong>Título:</strong> {{ pelicula.titulo }}<br>
+
+                <strong>Director:</strong> {{ pelicula.director }}<br>
+
+                <a href="{% url 'pelicula' pelicula.id %}">Ver detalles de la película</a>
+
+            </li>
+
+        {% empty %}
+
+            <p>Aún no has agregado ninguna película.</p>
+
+        {% endfor %}
+
+    </ul>
+
+    <br><br>
+
+    <h2>Comentarios</h2>
+
+    <ul>
+
+        {% for comentario in comentarios %}
+
+            <li>
+
+                {{ comentario.pelicula }}:<br>
+
+                {{ comentario.texto }}<br>
+
+                {{ comentario.fecha }}<br>
+
+                {% if comentario.usuario == request.user.usuario %}
+
+                    <form method="post" action="{% url 'eliminar_comentario' comentario.id %}">
+
+                        {% csrf_token %}
+
+                        <button type="submit">Eliminar</button>
+
+                    </form>
+
+                    <br>
+
+                    <form method="post" action="{% url 'editar_comentario' comentario.id %}">
+
+                        {% csrf_token %}
+
+                        <button type="submit">Editar</button>
+
+                    </form>
+
+                {% endif %}
+                
+            </li>
+
+        {% empty %}
+
+            <p>Aún no has comentado ninguna película.</p>
+
+        {% endfor %}    
+
+    </ul>
+
+    <br><br>
+
+    <!-- home -->
+    <a href="{% url 'home' %}">Volver al inicio</a>
+
+</body>
+</html>

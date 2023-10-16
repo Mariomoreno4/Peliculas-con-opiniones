@@ -1,0 +1,15 @@
+<h2>Editar Comentario</h2>
+    <form method="post" action="{% url 'editar_comentario' comentario.id %}">
+        {% csrf_token %}
+        <input type="text" name="texto" value="{{ comentario.texto }}">
+        <button type="submit">Guardar edición</button>
+    </form>
+
+
+
+
+
+
+
+
+
